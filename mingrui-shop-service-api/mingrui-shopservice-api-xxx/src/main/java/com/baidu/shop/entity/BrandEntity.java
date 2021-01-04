@@ -21,7 +21,7 @@ public class BrandEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    //品牌名称
+
     private String name;
 
     private String image;
