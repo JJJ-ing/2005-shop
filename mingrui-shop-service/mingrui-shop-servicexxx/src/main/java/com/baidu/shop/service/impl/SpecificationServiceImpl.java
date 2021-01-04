@@ -4,8 +4,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.baidu.shop.base.BaseApiService;
 import com.baidu.shop.base.Result;
 import com.baidu.shop.dto.SpecGroupDTO;
+import com.baidu.shop.dto.SpecParamDTO;
 import com.baidu.shop.entity.SpecGroupEntity;
+import com.baidu.shop.entity.SpecParamEntity;
 import com.baidu.shop.mapper.SpecGroupMapper;
+import com.baidu.shop.mapper.SpecParamMapper;
 import com.baidu.shop.service.SpecificationService;
 import com.baidu.shop.utils.BaiduBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,9 @@ import java.util.List;
 public class SpecificationServiceImpl extends BaseApiService implements SpecificationService {
     @Autowired
     private SpecGroupMapper specGroupMapper;
+
+    @Autowired
+    private SpecParamMapper specParamMapper;
 
     @Override
     public Result<List<SpecGroupEntity>> getSepcGroupInfo(SpecGroupDTO specGroupDTO) {
@@ -51,6 +57,10 @@ public class SpecificationServiceImpl extends BaseApiService implements Specific
 
     @Override
     public Result<JSONObject> deleteSpecGroupById(Integer id) {
+        Example example = new Example(SpecParamEntity.class);
+        example.createCriteria().andEqualTo("groupId",id);
+        List<SpecParamEntity> specParamEntities = specParamMapper.selectByExample(example);
+        if (specParamEntities.size() > 0) return  this.setResultError("当前规格组下有参数，请先删除规格组下的内容");
         specGroupMapper.deleteByPrimaryKey(id);
         return this.setResultSuccess();
     }
