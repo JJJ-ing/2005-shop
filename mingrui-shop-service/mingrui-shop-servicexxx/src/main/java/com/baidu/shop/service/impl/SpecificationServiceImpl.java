@@ -12,7 +12,6 @@ import com.baidu.shop.mapper.SpecParamMapper;
 import com.baidu.shop.service.SpecificationService;
 import com.baidu.shop.utils.BaiduBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.entity.Example;
 
@@ -61,6 +60,7 @@ public class SpecificationServiceImpl extends BaseApiService implements Specific
         example.createCriteria().andEqualTo("groupId",id);
         List<SpecParamEntity> specParamEntities = specParamMapper.selectByExample(example);
         if (specParamEntities.size() > 0) return  this.setResultError("当前规格组下有参数，请先删除规格组下的内容");
+
         specGroupMapper.deleteByPrimaryKey(id);
         return this.setResultSuccess();
     }
