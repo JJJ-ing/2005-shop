@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * @ClassName SpecParamServiceImpl
  * @Description: TODO
- * @Author shenyaqi
+ * @Author wangjing
  * @Date 2021/1/4
  * @Version V1.0
  **/

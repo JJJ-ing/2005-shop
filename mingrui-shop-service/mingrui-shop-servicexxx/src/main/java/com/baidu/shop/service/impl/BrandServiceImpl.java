@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 /**
  * @ClassName BrandServiceImpl
  * @Description: TODO
- * @Author shenyaqi
+ * @Author wangjing
  * @Date 2020/12/25
  * @Version V1.0
  **/
