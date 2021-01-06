@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.baidu.shop.base.BaseApiService;
 import com.baidu.shop.base.Result;
 import com.baidu.shop.dto.SpecGroupDTO;
-import com.baidu.shop.dto.SpecParamDTO;
 import com.baidu.shop.entity.SpecGroupEntity;
 import com.baidu.shop.entity.SpecParamEntity;
 import com.baidu.shop.mapper.SpecGroupMapper;
@@ -36,7 +35,8 @@ public class SpecificationServiceImpl extends BaseApiService implements Specific
     @Override
     public Result<List<SpecGroupEntity>> getSepcGroupInfo(SpecGroupDTO specGroupDTO) {
         Example example = new Example(SpecGroupEntity.class);
-        example.createCriteria().andEqualTo("cid", BaiduBeanUtil.copyProperties(specGroupDTO,SpecGroupEntity.class).getCid());
+        example.createCriteria().andEqualTo("cid",
+                BaiduBeanUtil.copyProperties(specGroupDTO,SpecGroupEntity.class).getCid());
 
         List<SpecGroupEntity> specGroupEntities = specGroupMapper.selectByExample(example);
         return this.setResultSuccess(specGroupEntities);
