@@ -13,7 +13,7 @@ import java.util.Date;
 /**
  * @ClassName SpuDTO
  * @Description: TODO
- * @Author shenyaqi
+ * @Author wangjing
  * @Date 2021/1/5
  * @Version V1.0
  **/
@@ -59,4 +59,8 @@ public class SpuDTO extends BaseDTO {
 
     @ApiModelProperty(value = "最后修改时间")
     private Date lastUpdateTime;
+
+    private String categoryName;
+
+    private String brandName;
 }
