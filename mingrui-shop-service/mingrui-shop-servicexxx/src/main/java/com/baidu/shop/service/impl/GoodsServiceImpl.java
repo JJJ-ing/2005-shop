@@ -139,4 +139,16 @@ public class GoodsServiceImpl extends BaseApiService implements GoodsService {
         })*/
         return this.setResultSuccess();
     }
+
+    @Override
+    public Result<SpuDetailEntity> getSpuDetailBySpuId(Integer spuId) {
+        SpuDetailEntity spuDetailEntity = spuDetailMapper.selectByPrimaryKey(spuId);
+        return this.setResultSuccess(spuDetailEntity);
+    }
+
+    @Override
+    public Result<List<SkuDTO>> getSkusBySpuId(Integer spuId) {
+        List<SkuDTO> list = skuMapper.getSkusAndStockBySpuId(spuId);
+        return this.setResultSuccess(list);
+    }
 }
