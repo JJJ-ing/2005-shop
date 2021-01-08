@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 /**
  * @ClassName BrandDTO
  * @Description: TODO
- * @Author shenyaqi
+ * @Author wangjing
  * @Date 2020/12/25
  * @Version V1.0
  **/
@@ -35,5 +35,6 @@ public class BrandDTO extends BaseDTO {
     private Character letter;
 
     @ApiModelProperty(value = "品牌id集合")
+    @NotNull(message = "集合不能为空",groups = {MingruiOperation.Add.class})
     private String categories;
 }

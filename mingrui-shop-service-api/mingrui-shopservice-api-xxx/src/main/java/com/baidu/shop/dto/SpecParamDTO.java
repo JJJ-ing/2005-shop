@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 /**
  * @ClassName SpecParamDTO
  * @Description: TODO
- * @Author shenyaqi
+ * @Author wangjing
  * @Date 2021/1/4
  * @Version V1.0
  **/
@@ -24,12 +24,15 @@ public class SpecParamDTO extends BaseDTO {
     private Integer id;
 
     @ApiModelProperty(value = "分类id",example = "1")
+    @NotNull(message = "主键不能为空",groups = {MingruiOperation.Update.class})
     private Integer cid;
 
     @ApiModelProperty(value = "规格组id",example = "1")
+    @NotNull(message = "主键不能为空",groups = {MingruiOperation.Update.class})
     private Integer groupId;
 
     @ApiModelProperty(value = "规格参数名称")
+    @NotNull(message = "名称不能为空",groups = {MingruiOperation.Add.class})
     private String name;
 
     @ApiModelProperty(value = "是否是数字类型参数，1->true或0->false",example = "0")
