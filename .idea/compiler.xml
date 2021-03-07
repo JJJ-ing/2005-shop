@@ -9,6 +9,7 @@
         <module name="mingrui-shop-basic-upload-server" />
         <module name="mingrui-shopcommon-core" />
         <module name="mingrui-shop-service-search" />
+        <module name="Thymeleaf" />
         <module name="mingrui-shopservice-api-xxx" />
         <module name="mingrui-shop-basics-eureka-server" />
         <module name="mingrui-shop-basiczuul-server" />

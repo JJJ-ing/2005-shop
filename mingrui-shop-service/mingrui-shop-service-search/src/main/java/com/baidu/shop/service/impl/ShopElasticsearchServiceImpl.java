@@ -21,6 +21,8 @@ import com.baidu.shop.status.HTTPStatus;
 import com.baidu.shop.utils.HighlightUtil;
 import com.baidu.shop.utils.JSONUtil;
 import org.apache.commons.lang.math.NumberUtils;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.Aggregations;
@@ -232,10 +234,10 @@ public class ShopElasticsearchServiceImpl extends BaseApiService implements Shop
     }
 
     @Override
-    public GoodsResponse search(String search, Integer page) {
+    public GoodsResponse search(String search, Integer page,String filter) {
 
         //查询es库
-        SearchHits<GoodsDoc> searchHits = elasticsearchRestTemplate.search(this.getNativeSearchQueryBuilder(search,page).build(),GoodsDoc.class);
+        SearchHits<GoodsDoc> searchHits = elasticsearchRestTemplate.search(this.getNativeSearchQueryBuilder(search,page,filter).build(),GoodsDoc.class);
 
         List<GoodsDoc> goodsDocs = HighlightUtil.getHighlightList(searchHits.getSearchHits());
 
@@ -298,12 +300,37 @@ public class ShopElasticsearchServiceImpl extends BaseApiService implements Shop
     }
 
     //得到NativeSearchQueryBuilder
-    private  NativeSearchQueryBuilder getNativeSearchQueryBuilder(String search,Integer page){
+    private  NativeSearchQueryBuilder getNativeSearchQueryBuilder(String search,Integer page,String filter){
         NativeSearchQueryBuilder nativeSearchQueryBuilder = new NativeSearchQueryBuilder();
         //多字段查询
         nativeSearchQueryBuilder.withQuery(
                 QueryBuilders.multiMatchQuery(search,"title","brandName","categoryName")
         );
+
+        //过滤查询
+        if (!StringUtils.isEmpty(filter) && filter.length() > 2){
+            //将字符转换成map集合
+            Map<String,String> filterMap = JSONUtil.toMapValueString(filter);
+            BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+            //遍历map集合
+            filterMap.forEach((key,value) -> {
+                MatchQueryBuilder matchQueryBuilder = null;
+                //判断key是否为cid3和brandId
+                if(key.equals("brandId") || key.equals("cid3")){
+                    matchQueryBuilder = QueryBuilders.matchQuery(key, value);
+                }else{
+                    matchQueryBuilder = QueryBuilders.matchQuery("specs." + key + ".keyword", value);
+                }
+
+                boolQueryBuilder.must(matchQueryBuilder);
+            });
+            nativeSearchQueryBuilder.withFilter(boolQueryBuilder);
+
+            /*nativeSearchQueryBuilder.withFilter(
+                    QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("spec.分辨率.keyword","分辨率"))
+                            .must(QueryBuilders.matchQuery("brandId","8557"))
+            );*/
+        }
         //结果过滤
         nativeSearchQueryBuilder.withSourceFilter(new FetchSourceFilter(new String[]{"id","title","skus"},null));
         //设置分页
