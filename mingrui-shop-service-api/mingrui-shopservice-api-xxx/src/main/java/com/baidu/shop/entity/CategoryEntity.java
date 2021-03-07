@@ -24,7 +24,7 @@ import javax.validation.constraints.NotNull;
 public class CategoryEntity {
     @Id
     @ApiModelProperty(value = "分类主键",example = "1")
-    @NotNull(message = "ID不能为空",groups = {MingruiOperation.Add.class})
+    @NotNull(message = "ID不能为空",groups = {MingruiOperation.Update.class})
     private Integer id;
 
     @ApiModelProperty(value = "分类名称")

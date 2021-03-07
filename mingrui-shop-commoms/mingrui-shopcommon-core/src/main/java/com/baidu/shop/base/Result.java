@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 /**
  * @ClassName Result
  * @Description: TODO
- * @Author shenyaqi
+ * @Author wangjing
  * @Date 2020/12/23
  * @Version V1.0
  **/
@@ -27,5 +27,9 @@ public class Result<T> {
         this.code = code;
         this.message = message;
         this.data = (T) data;
+    }
+
+    public boolean isSuccess(){
+        return this.code == 200;
     }
 }

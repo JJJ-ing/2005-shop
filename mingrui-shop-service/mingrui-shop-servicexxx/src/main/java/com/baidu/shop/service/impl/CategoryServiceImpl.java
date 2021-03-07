@@ -15,12 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName CategoryServiceImpl
  * @Description: TODO
- * @Author shenyaqi
+ * @Author wangjing
  * @Date 2020/12/23
  * @Version V1.0
  **/
@@ -104,5 +106,12 @@ public class CategoryServiceImpl extends BaseApiService implements CategoryServi
 
         categoryMapper.insertSelective(categoryEntity);
         return this.setResultSuccess();
+    }
+
+    @Override
+    public Result<List<CategoryEntity>> getCategoryByIdList(String ids) {
+        List<Integer> idList = Arrays.asList(ids.split(",")).stream().map(idStr -> Integer.valueOf(idStr)).collect(Collectors.toList());
+        List<CategoryEntity> categoryEntities = categoryMapper.selectByIdList(idList);
+        return this.setResultSuccess(categoryEntities);
     }
 }

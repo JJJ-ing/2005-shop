@@ -3,7 +3,7 @@ package com.baidu.shop.status;
 /**
  * @ClassName HTTPStatus
  * @Description: TODO
- * @Author shenyaqi
+ * @Author wangjing
  * @Date 2020/12/23
  * @Version V1.0
  **/

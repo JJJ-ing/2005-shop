@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * @ClassName JSONUtil
  * @Description: TODO
- * @Author shenyaqi
+ * @Author wangjing
  * @Date 2020/12/22
  * @Version V1.0
  **/
@@ -44,6 +44,20 @@ public class JSONUtil {
     public static <T> T toBean(String json, Class<T> clz) {
         return gson.fromJson(json, clz);
     }
+
+    public static Map<String, String> toMapValueString(String json) {
+
+        Map<String, String> map = gson.fromJson(json, new TypeToken<Map<String, String>>() {}.getType());
+        return map;
+    }
+
+    public static Map<String, List<String>> toMapValueStrList(String json) {
+
+        Map<String, List<String>> map = gson.fromJson(json, new TypeToken<Map<String, List<String>>>() {}.getType());
+
+        return map;
+    }
+
     public static <T> Map<String, T> toMap(String json, Class<T> clz) {
         Map<String, JsonObject> map = gson.fromJson(json, new
                 TypeToken<Map<String, JsonObject>>() {

@@ -5,10 +5,10 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- * @ClassName BaseDTO
+ * @ClassName Result
  * @Description: TODO
- * @Author shenyaqi
- * @Date 2020/12/25
+ * @Author wangjing
+ * @Date 2020/12/23
  * @Version V1.0
  **/
 
