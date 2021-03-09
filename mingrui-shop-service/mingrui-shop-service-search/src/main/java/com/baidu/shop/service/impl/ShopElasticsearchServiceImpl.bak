@@ -11,7 +11,7 @@ import com.baidu.shop.entity.BrandEntity;
 import com.baidu.shop.entity.CategoryEntity;
 import com.baidu.shop.entity.SpecParamEntity;
 import com.baidu.shop.entity.SpuDetailEntity;
-import com.baidu.shop.feign.BrandFeign;
+import com.baidu.shop.feign.Commons;
 import com.baidu.shop.feign.CategoryFeign;
 import com.baidu.shop.feign.GoodsFeign;
 import com.baidu.shop.feign.SpecificationFeign;

@@ -5,6 +5,7 @@ import com.baidu.shop.base.BaseApiService;
 import com.baidu.shop.base.Result;
 import com.baidu.shop.entity.CategoryBrandEntity;
 import com.baidu.shop.mapper.BrandMapper;
+import com.baidu.shop.utils.ObjectUtil;
 import com.baidu.shop.utils.PinyinUtil;
 import com.baidu.shop.dto.BrandDTO;
 import com.baidu.shop.entity.BrandEntity;
@@ -46,36 +47,24 @@ public class BrandServiceImpl extends BaseApiService implements BrandService {
 
     @Override
     public Result<PageInfo<BrandEntity>> getBrandInfo(BrandDTO brandDTO) {
-        PageHelper.startPage(brandDTO.getPage(),brandDTO.getRows());
+        if(ObjectUtil.isNotNull(brandDTO.getPage())&& ObjectUtil.isNotNull(brandDTO.getRows())){
+
+            PageHelper.startPage(brandDTO.getPage(),brandDTO.getRows());
+        }
+
 
         if (!StringUtils.isEmpty(brandDTO.getSort())) PageHelper.orderBy(brandDTO.getOrderBy());
 
-        //        if(!StringUtils.isEmpty(brandDTO.getSort())){
-
-        //String order = "";
-        //valueOf 和 parse***的区别???
-        //null值排序的现象???? null值排序值是最小的
-        //Integer.valueOf 和Integer.parseInteger()方法的区别???
-//            if(Boolean.valueOf(brandDTO.getOrder())){
-//                order = "desc";
-//            }else{
-//                order = "asc";
-//            }
-        //三目运算 ?? 条件表达式 ? "true" : "false" --> if代码块和else代码块中都只有一行代码的话可以直接写成三目运算
-        //PageHelper.orderBy(brandDTO.getSort() + " " + (Boolean.valueOf(brandDTO.getOrder()) ? "desc" : "asc"));
-//            PageHelper.orderBy(brandDTO.getOrderBy());
-//        }
-
-
-        //bean copy
-//        BrandEntity brandEntity = new BrandEntity();
-//        BeanUtils.copyProperties(brandDTO,brandEntity);
 
         BrandEntity brandEntity = BaiduBeanUtil.copyProperties(brandDTO,BrandEntity.class);
 
         Example example = new Example(BrandEntity.class);
+        Example.Criteria criteria = example.createCriteria();
         if (!StringUtils.isEmpty(brandEntity.getName()))
-            example.createCriteria().andLike("name","%" + brandEntity.getName() + "%");
+            criteria.andLike("name","%" + brandEntity.getName() + "%");
+        if(ObjectUtil.isNotNull(brandDTO.getId())){
+            criteria.andEqualTo("id",brandDTO.getId());
+        }
 
         List<BrandEntity> brandEntities = brandMapper.selectByExample(example);
         PageInfo<BrandEntity> pageInfo = new PageInfo<>(brandEntities);
