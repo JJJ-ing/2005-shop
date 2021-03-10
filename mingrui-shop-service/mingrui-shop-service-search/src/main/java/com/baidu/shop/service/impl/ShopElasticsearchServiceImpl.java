@@ -17,7 +17,6 @@ import com.baidu.shop.feign.GoodsFeign;
 import com.baidu.shop.feign.SpecificationFeign;
 import com.baidu.shop.response.GoodsResponse;
 import com.baidu.shop.service.ShopElasticsearchService;
-import com.baidu.shop.status.HTTPStatus;
 import com.baidu.shop.utils.HighlightUtil;
 import com.baidu.shop.utils.JSONUtil;
 import org.apache.commons.lang.math.NumberUtils;
@@ -66,9 +65,9 @@ public class ShopElasticsearchServiceImpl extends BaseApiService implements Shop
     private CategoryFeign categoryFeign;
 
     //@Override
-    public List<GoodsDoc> esGoodsInfo() {
+    private List<GoodsDoc> esGoodsInfo(SpuDTO spuDTO) {
 
-        SpuDTO spuDTO = new SpuDTO();
+        //SpuDTO spuDTO = new SpuDTO();
         /*spuDTO.setPage(1);
         spuDTO.setRows(5);*/
         Result<List<SpuDTO>> spuInfo = goodsFeign.getSpuInfo(spuDTO);
@@ -211,6 +210,24 @@ public class ShopElasticsearchServiceImpl extends BaseApiService implements Shop
     }
 
     @Override
+    public Result<JSONObject> saveData(Integer spuId) {
+        SpuDTO spuDTO = new SpuDTO();
+        spuDTO.setId(spuId);
+        List<GoodsDoc> goodsDocs = this.esGoodsInfo(spuDTO);
+        elasticsearchRestTemplate.save(goodsDocs.get(0));
+        return this.setResultSuccess();
+    }
+
+    @Override
+    public Result<JSONObject> delData(Integer spuId) {
+        GoodsDoc goodsDoc = new GoodsDoc();
+        goodsDoc.setId(spuId.longValue());
+
+        elasticsearchRestTemplate.delete(goodsDoc);
+        return this.setResultSuccess();
+    }
+
+    @Override
     public Result<JSONObject> initGoodsEsData() {
         IndexOperations indexOperations = elasticsearchRestTemplate.indexOps(GoodsDoc.class);
         if (!indexOperations.exists()){
@@ -219,7 +236,7 @@ public class ShopElasticsearchServiceImpl extends BaseApiService implements Shop
         }
 
         //查询musql中的数据
-        List<GoodsDoc> goodsDocs = this.esGoodsInfo();
+        List<GoodsDoc> goodsDocs = this.esGoodsInfo(new SpuDTO());
         elasticsearchRestTemplate.save(goodsDocs);
         return this.setResultSuccess();
     }

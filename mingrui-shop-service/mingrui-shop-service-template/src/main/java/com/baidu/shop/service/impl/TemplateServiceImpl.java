@@ -66,7 +66,8 @@ public class TemplateServiceImpl extends BaseApiService implements TemplateServi
     @Override
     public Result<JSONObject> createStaticHTMLTemplate(Integer spuId) {
         //得到要渲染的数据
-        Map<String,Object> goodsInfo = this.getGoodsInfo(spuId);
+        Map<String, Object> goodsInfo = this.getGoodsInfo(spuId);
+
         Context context = new Context();
         context.setVariables(goodsInfo);
 
@@ -90,7 +91,6 @@ public class TemplateServiceImpl extends BaseApiService implements TemplateServi
             if(ObjectUtil.isNotNull(writer))
                 writer.close();
         }
-
         return this.setResultSuccess();
     }
 
