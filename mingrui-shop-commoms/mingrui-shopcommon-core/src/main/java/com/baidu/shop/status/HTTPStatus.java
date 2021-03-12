@@ -19,4 +19,6 @@ public class HTTPStatus {
 
     //参数验证失败
     public static final int PARAMS_VALIDATE_ERROR = 5002;
+
+    public static final int USER_NOT_LOGIN = 403;
 }
