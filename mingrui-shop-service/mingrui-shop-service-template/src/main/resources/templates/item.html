@@ -201,8 +201,7 @@
                                 </dt>
 
                                 <dd v-for="(v,i) in value" :key="i">
-                                    <a href="javascript:;" @click="indexes[key] = i"
-                                       :class="{selected : i == indexes[key]}">
+                                    <a href="javascript:;" @click="indexes[key] = i" :class="{selected : i == indexes[key]}">
                                         {{ v }} <span title="点击取消选择">&nbsp;</span>
                                     </a>
                                 </dd>
@@ -451,8 +450,7 @@
                             </div>
                             <div id="two" class="tab-pane">
                                 <div class="Ptable">
-                                    <div class="Ptable-item" v-for="(group,index) in specGroupAndParam"
-                                         v-if="group.specList.length > 0" :key="index">
+                                    <div class="Ptable-item" v-for="(group,index) in specGroupAndParam" v-if="group.specList.length > 0" :key="index">
                                         <h3>{{ group.name }}</h3>
                                         <dl v-for="(param,i) in group.specList" :key="i">
                                             <dt>{{ param.name }}</dt>
@@ -641,12 +639,12 @@
             specGroupAndParam,
             genericSpec
         },
-        computed: {
-            sku() {
+        computed:{
+            sku () {
                 const index = Object.values(this.indexes).join('_');
                 return this.skus.find(sku => sku.indexes == index);
             },
-            images() {
+            images () {
                 return this.sku.images ? this.sku.images.split(',') : [];
             }
         },
