@@ -15,6 +15,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>mingrui-shopcommon-core</module>
+        <module>mingrui-shop-common-oauth</module>
     </modules>
 
 </project>
