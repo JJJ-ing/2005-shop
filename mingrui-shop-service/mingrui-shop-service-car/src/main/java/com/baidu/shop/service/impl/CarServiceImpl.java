@@ -37,6 +37,9 @@ import java.util.Map;
 @Slf4j
 public class CarServiceImpl extends BaseApiService implements CarService {
     private final String GOODS_CAR_PRE = "goods-car-";
+    private final Integer GOODS_CAR_INCREMENT = 1;
+//    private final Integer GOODS_CAR_DECREMENT = 2;
+
 
     @Autowired
     private JwtConfig jwtConfig;
@@ -118,5 +121,26 @@ public class CarServiceImpl extends BaseApiService implements CarService {
         }
 
         return this.setResultSuccess(cars);
+    }
+
+    @Override
+    public Result<JSONObject> operationNum(String token, Integer type, Long skuId) {
+        try {
+            UserInfo userInfo = JwtUtils.getInfoFromToken(token, jwtConfig.getPublicKey());
+
+            Car redisCar = redisRepository.getHash(GOODS_CAR_PRE + userInfo.getId(), skuId + "", Car.class);
+            /*if(type == 1){
+                redisCar.setNum(redisCar.getNum() + 1);
+            }else{
+                redisCar.setNum(redisCar.getNum() - 1);
+            }*/
+            redisCar.setNum(type == GOODS_CAR_INCREMENT ? redisCar.getNum() + 1 : redisCar.getNum() - 1);
+
+            redisRepository.setHash(GOODS_CAR_PRE + userInfo.getId(), skuId + "",JSONUtil.toJsonString(redisCar));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return this.setResultSuccess();
     }
 }
