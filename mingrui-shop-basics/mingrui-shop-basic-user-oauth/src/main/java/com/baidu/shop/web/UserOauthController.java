@@ -47,7 +47,7 @@ public class UserOauthController extends BaseApiService {
         return this.setResultSuccess();
     }
 
-    @GetMapping(value = "verify")
+    @GetMapping (value = "verify")
     public Result<UserInfo> checkUserIsLogin(@CookieValue(value = "MRSHOP_TOKEN") String token
             ,HttpServletRequest request,HttpServletResponse response){
         UserInfo userInfo = null;

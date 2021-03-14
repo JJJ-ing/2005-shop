@@ -212,18 +212,18 @@
                             <div class="fl title">
                                 <div class="control-group">
                                     <div class="controls">
-                                        <input autocomplete="off" type="text" disabled value="1" minnum="1"
+                                        <input autocomplete="off" type="text" disabled :value="num" minnum="1"
                                                class="itxt"/>
-                                        <a href="javascript:void(0)" class="increment plus">+</a>
-                                        <a href="javascript:void(0)" class="increment mins">-</a>
+                                        <a href="javascript:void(0)" class="increment plus" @click="increment">+</a>
+                                        <a href="javascript:void(0)" class="increment mins" @click="decrement">-</a>
                                     </div>
                                 </div>
                             </div>
                             <div class="fl">
                                 <ul class="btn-choose unstyled">
                                     <li>
-                                        <a href="success-cart.html" target="_blank"
-                                           class="sui-btn  btn-danger addshopcar">加入购物车</a>
+                                        <a href="success-cart.html"
+                                           class="sui-btn  btn-danger addshopcar" @click.prevent="addCar">加入购物车</a>
                                     </li>
                                 </ul>
                             </div>
@@ -637,7 +637,56 @@
             mrshop,
             spuDetail,
             specGroupAndParam,
-            genericSpec
+            genericSpec,
+            num:1
+        },
+        methods:{
+            addCar () {
+
+                mrshop.checkUserIsLogin().then(() => {
+                    mrshop.http.post('car-center/car/addCar',{
+                        skuId:this.sku.id,
+                        num:this.num
+                    }).then(resp => {
+                        window.location.href = '../success-cart.html';
+                    }).catch(error => console.log(error));
+                }).catch(() => {
+                    //用户没有登录
+                    //要将当前商品以及购买的数量放到localstorage
+                    //mrshop.store.set('carList',当前商品)
+                    //let carList = [];
+
+                    //获取localStorage中的购物车数据
+                    let carList = mrshop.store.get(mrshop.CAR_LIST) || [];
+                    //先判断当前购物车列表中有没有当前商品
+                    //有 : 原来商品的num + 现在商品的num
+                    const oldGoods = carList.find(goods => goods.skuId == this.sku.id);
+                    if(oldGoods){
+
+                        oldGoods.num += this.num;
+                    }else{
+                        const car = {
+                            skuId:this.sku.id,
+                            title:this.sku.title,
+                            image:this.images.length > 0 ? this.images[0] : '',
+                            price:this.sku.price,
+                            num:this.num,
+                            ownSpec: this.ownSpec
+                        };
+                        carList.push(car);//想数组中放元素
+                    }
+                    mrshop.store.set(mrshop.CAR_LIST,carList);//将购物车数据放到localStorage中
+                    window.location.href="../success-cart.html";
+                });
+                //不能直接在此处跳转, axios是异步的,在此处直接跳转的话 axios还没有请求成功就已经跳转了页面了,所以会导致添加到购物车失败
+                //window.location.href = '../success-cart.html';
+            },
+            increment () {
+                if(this.sku.stock > this.num) this.num++;
+            },
+            decrement () {
+                if(this.num > 1) this.num--;
+            }
         },
         computed:{
             sku () {
@@ -646,6 +695,18 @@
             },
             images () {
                 return this.sku.images ? this.sku.images.split(',') : [];
+            },
+            ownSpec () {
+                const ownSpecJson = JSON.parse(this.sku.ownSpec);// {4:白色}
+                //this.specParamMap;//{4:机身颜色}
+                let obj = {};//{机身颜色:白色}
+                Object.keys(ownSpecJson).forEach(key => {
+                    obj[this.specParamMap[key]] = ownSpecJson[key];
+                });
+                // for (const key in ownSpecJson) {
+                //     obj[this.specParamMap[key]] = ownSpecJson[key];
+                // }
+                return obj;
             }
         },
         components: {

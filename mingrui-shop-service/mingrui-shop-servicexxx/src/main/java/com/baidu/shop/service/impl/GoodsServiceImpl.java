@@ -222,6 +222,13 @@ public class GoodsServiceImpl extends BaseApiService implements GoodsService {
         return this.setResultError("失败");
     }
 
+    @Override
+    public Result<SkuEntity> getSkuById(Long skuId) {
+        SkuEntity skuEntity = skuMapper.selectByPrimaryKey(skuId);
+
+        return this.setResultSuccess(skuEntity);
+    }
+
     private void deleteSkusAndStock(Integer spuId) {
         Example example = new Example(SkuEntity.class);
         example.createCriteria().andEqualTo("spuId",spuId);
