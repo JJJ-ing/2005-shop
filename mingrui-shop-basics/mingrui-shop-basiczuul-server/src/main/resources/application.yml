@@ -15,6 +15,8 @@ zuul:
     user-server: /user-center/**
     oauth-server: /oauth-center/**
     car-server: /car-center/**
+    order-server: /order-center/**
+    pay-server: /pay/**
 
 #    api-xxx:
 #      # 声明将所有以/api-ribbon/的请求都转发到eureka-ribbon的服务中
